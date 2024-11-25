@@ -38,28 +38,65 @@ public class AnnounceController {
     }
 
     @GetMapping("/all")
-    @ResponseBody CollectionModel<EntityModel<Announce>> all() {
+    @ResponseBody
+    CollectionModel<EntityModel<Announce>> all() {
         List<EntityModel<Announce>> announces = repository.findAll().stream().map(
                 assembler::toModel).collect(Collectors.toList());
 
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
     }
 
+    @GetMapping("/all?type={type}")
+    @ResponseBody
+    CollectionModel<EntityModel<Announce>> all(@RequestParam String type) {
+        List<EntityModel<Announce>> announces = repository.findAll().stream().map(
+                assembler::toModel).collect(Collectors.toList());
 
+        return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
+    }
 
     @GetMapping("/{id}")
-    @ResponseBody EntityModel<Announce> one(@PathVariable Long id) {
+    @ResponseBody
+    EntityModel<Announce> one(@PathVariable Long id) {
         Announce announce = repository.findById(id).orElseThrow(() -> new AnnounceNotFoundException(id));
 
         return assembler.toModel(announce);
     }
 
     @PostMapping("/add")
-    @ResponseBody ResponseEntity<EntityModel<Announce>> newAnnounce(@RequestBody Announce a) {
+    @ResponseBody
+    ResponseEntity<EntityModel<Announce>> newAnnounce(@RequestBody Announce a) {
         Announce newAnnounce = repository.save(a); 
 
         return ResponseEntity.created(linkTo(methodOn(AnnounceController.class).one(newAnnounce.getId())).toUri()).body(
                 assembler.toModel(newAnnounce));
 
     } 
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    ResponseEntity<?> remove(@PathVariable Long id) {
+        repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    ResponseEntity<?> updateAnnounce(@RequestBody Announce newAnnounce, @PathVariable Long id) {
+        Announce updateAnnounce = repository.findById(id).map(announce -> {
+            announce.setName(newAnnounce.getName());
+            announce.setDescription(newAnnounce.getDescription());
+            announce.setType(newAnnounce.getType());
+            announce.setSeller(newAnnounce.getSeller());
+            announce.setValue(newAnnounce.getValue());
+            return repository.save(announce);
+        }).orElseGet(() -> {
+            return repository.save(newAnnounce);
+        });
+
+        return ResponseEntity //
+            .created(assembler.toModel(updateAnnounce).getRequiredLink(IanaLinkRelations.SELF).toUri()) //
+            .body(assembler.toModel(updateAnnounce));
+    }
 }
