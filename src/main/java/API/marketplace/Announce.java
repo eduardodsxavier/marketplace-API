@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-class Product {
+class Announce{ 
     private @Id @GeneratedValue Long id;
     private String name;
     private String description;
@@ -15,9 +15,9 @@ class Product {
     private String seller;
     private float value;
 
-    Product() {} 
+    Announce() {} 
 
-    Product(Long id, String name, String description, String type, String seller, float value) {
+    Announce(Long id, String name, String description, String type, String seller, float value) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -72,5 +72,35 @@ class Product {
 
     public void setValue(float value) {
         this.value = value;
+    }
+
+    @Override 
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Announce)) {
+            return false;
+        }
+
+        Announce todo = (Announce) o;
+        return Objects.equals(this.id, todo.id)
+            && Objects.equals(this.name, todo.name)
+            && Objects.equals(this.description, todo.description)
+            && Objects.equals(this.type, todo.type)
+            && Objects.equals(this.seller, todo.seller)
+            && Objects.equals(this.value, todo.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.description, this.type, this.seller, this.value);
+        
+    }
+
+    @Override
+    public String toString() {
+        return "Announce{id=" + this.id + ", name=" + this.name + ", description=" + this.description + 
+            ", type=" + this.type + ", seller=" + this.seller + ", value=" + this.value + "}";
     }
 }
