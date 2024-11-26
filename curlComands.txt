@@ -1,0 +1,5 @@
+curl -v localhost:8080/announces/{id}
+curl -v localhost:8080/announces/all
+curl -X POST localhost:8080/announces/add -H 'Content-type:application/json' -d '{"name": "", "description": "", "type": "", "seller": "", "value": ""}'
+curl -X PUT localhost:8080/announces/{id} -H 'Content-type:application/json' -d '{"name": "", "description": "", "type": "", "seller": "", "value": ""}'
+curl -X DELETE localhost:8080/announces/{id}

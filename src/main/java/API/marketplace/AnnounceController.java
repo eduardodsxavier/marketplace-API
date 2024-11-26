@@ -37,6 +37,7 @@ public class AnnounceController {
         this.assembler = assembler;
     }
 
+    // return all the announces on the database
     @GetMapping("/all")
     @ResponseBody
     CollectionModel<EntityModel<Announce>> all() {
@@ -46,15 +47,7 @@ public class AnnounceController {
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
     }
 
-    @GetMapping("/all?type={type}")
-    @ResponseBody
-    CollectionModel<EntityModel<Announce>> all(@RequestParam String type) {
-        List<EntityModel<Announce>> announces = repository.findAll().stream().map(
-                assembler::toModel).collect(Collectors.toList());
-
-        return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
-    }
-
+    // return the announces on the database with the id passed by the URL
     @GetMapping("/{id}")
     @ResponseBody
     EntityModel<Announce> one(@PathVariable Long id) {
@@ -63,6 +56,7 @@ public class AnnounceController {
         return assembler.toModel(announce);
     }
 
+    // add the Announce passend in the body of the post
     @PostMapping("/add")
     @ResponseBody
     ResponseEntity<EntityModel<Announce>> newAnnounce(@RequestBody Announce a) {
@@ -73,14 +67,7 @@ public class AnnounceController {
 
     } 
 
-    @DeleteMapping("/{id}")
-    @ResponseBody
-    ResponseEntity<?> remove(@PathVariable Long id) {
-        repository.deleteById(id);
-
-        return ResponseEntity.noContent().build();
-    }
-
+    // verify if the announce of id x exist if so change the values of the announce, if don't exist add the announce
     @PutMapping("/{id}")
     @ResponseBody
     ResponseEntity<?> updateAnnounce(@RequestBody Announce newAnnounce, @PathVariable Long id) {
@@ -98,5 +85,14 @@ public class AnnounceController {
         return ResponseEntity //
             .created(assembler.toModel(updateAnnounce).getRequiredLink(IanaLinkRelations.SELF).toUri()) //
             .body(assembler.toModel(updateAnnounce));
+    }
+
+    // delete the announce of id passed to the URL
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    ResponseEntity<?> remove(@PathVariable Long id) {
+        repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
