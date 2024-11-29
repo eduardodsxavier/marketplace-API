@@ -1,4 +1,4 @@
-package API.marketplace;
+package API.marketplace.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +26,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import API.marketplace.repositorys.AnnounceRepository;
+import API.marketplace.models.Announce;
+import API.marketplace.assembler.AnnounceModelAssembler;
+import API.marketplace.exceptions.AnnounceNotFoundException;
+
 @RequestMapping(path="/announces")
 @Controller
 public class AnnounceController {
@@ -40,7 +45,7 @@ public class AnnounceController {
     // return all the announces on the database
     @GetMapping("/all")
     @ResponseBody
-    CollectionModel<EntityModel<Announce>> all() {
+    public CollectionModel<EntityModel<Announce>> all() {
         List<EntityModel<Announce>> announces = repository.findAll().stream().map(
                 assembler::toModel).collect(Collectors.toList());
 
@@ -50,7 +55,7 @@ public class AnnounceController {
     // return the announces on the database with the id passed by the URL
     @GetMapping("/{id}")
     @ResponseBody
-    EntityModel<Announce> one(@PathVariable Long id) {
+    public EntityModel<Announce> one(@PathVariable Long id) {
         Announce announce = repository.findById(id).orElseThrow(() -> new AnnounceNotFoundException(id));
 
         return assembler.toModel(announce);
@@ -59,7 +64,7 @@ public class AnnounceController {
     // add the Announce passend in the body of the post
     @PostMapping("/add")
     @ResponseBody
-    ResponseEntity<EntityModel<Announce>> newAnnounce(@RequestBody Announce a) {
+    public ResponseEntity<EntityModel<Announce>> newAnnounce(@RequestBody Announce a) {
         Announce newAnnounce = repository.save(a); 
 
         return ResponseEntity.created(linkTo(methodOn(AnnounceController.class).one(newAnnounce.getId())).toUri()).body(
@@ -70,7 +75,7 @@ public class AnnounceController {
     // verify if the announce of id x exist if so change the values of the announce, if don't exist add the announce
     @PutMapping("/{id}")
     @ResponseBody
-    ResponseEntity<?> updateAnnounce(@RequestBody Announce newAnnounce, @PathVariable Long id) {
+    public ResponseEntity<?> updateAnnounce(@RequestBody Announce newAnnounce, @PathVariable Long id) {
         Announce updateAnnounce = repository.findById(id).map(announce -> {
             announce.setName(newAnnounce.getName());
             announce.setDescription(newAnnounce.getDescription());
@@ -90,7 +95,7 @@ public class AnnounceController {
     // delete the announce of id passed to the URL
     @DeleteMapping("/{id}")
     @ResponseBody
-    ResponseEntity<?> remove(@PathVariable Long id) {
+    public ResponseEntity<?> remove(@PathVariable Long id) {
         repository.deleteById(id);
 
         return ResponseEntity.noContent().build();

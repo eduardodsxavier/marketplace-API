@@ -1,4 +1,4 @@
-package API.marketplace;
+package API.marketplace.assembler;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -6,8 +6,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+import API.marketplace.models.Announce;
+import API.marketplace.controllers.AnnounceController;
+
+
 @Component
-class AnnounceModelAssembler implements RepresentationModelAssembler<Announce, EntityModel<Announce>> {
+public class AnnounceModelAssembler implements RepresentationModelAssembler<Announce, EntityModel<Announce>> {
 
     @Override
     public EntityModel<Announce> toModel(Announce a) {

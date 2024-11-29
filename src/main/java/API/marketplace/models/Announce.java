@@ -1,4 +1,4 @@
-package API.marketplace;
+package API.marketplace.models;
 
 import java.util.Objects;
 
@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-class Announce{ 
+public class Announce{ 
     private @Id @GeneratedValue Long id;
     private String name;
     private String description;
