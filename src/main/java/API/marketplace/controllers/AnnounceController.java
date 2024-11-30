@@ -45,6 +45,16 @@ public class AnnounceController {
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
     }
 
+    // return all the announces on the database
+    @GetMapping("/all/{type}")
+    @ResponseBody
+    public CollectionModel<EntityModel<Announce>> searchByType(@PathVariable String type) {
+        List<EntityModel<Announce>> announces = repository.findByType(type).stream().map(
+                assembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
+    }
+
     // return the announces on the database with the id passed by the URL
     @GetMapping("/{id}")
     @ResponseBody
@@ -86,7 +96,7 @@ public class AnnounceController {
     }
 
     // delete the announce of id passed to the URL
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/remove")
     @ResponseBody
     public ResponseEntity<?> remove(@PathVariable Long id) {
         repository.deleteById(id);
