@@ -45,11 +45,21 @@ public class AnnounceController {
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
     }
 
-    // return all the announces on the database
-    @GetMapping("/all/{type}")
+    // return all the announces with given type on the database
+    @GetMapping("/type/{type}")
     @ResponseBody
     public CollectionModel<EntityModel<Announce>> searchByType(@PathVariable String type) {
         List<EntityModel<Announce>> announces = repository.findByType(type).stream().map(
+                assembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
+    }
+
+    // return all the announces with given type on the database
+    @GetMapping("/seller/{seller}")
+    @ResponseBody
+    public CollectionModel<EntityModel<Announce>> searchBySeller(@PathVariable String seller) {
+        List<EntityModel<Announce>> announces = repository.findBySeller(seller).stream().map(
                 assembler::toModel).collect(Collectors.toList());
 
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());

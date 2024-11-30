@@ -10,4 +10,7 @@ import API.marketplace.models.Announce;
 public interface AnnounceRepository extends JpaRepository<Announce, Long> {
     @Query("SELECT a FROM Announce a WHERE a.type = %?1")
     List<Announce> findByType(String type);
+
+    @Query("SELECT a FROM Announce a WHERE a.seller = %?1")
+    List<Announce> findBySeller(String seller);
 }

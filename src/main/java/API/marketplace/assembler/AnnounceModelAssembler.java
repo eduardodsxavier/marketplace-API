@@ -19,7 +19,9 @@ public class AnnounceModelAssembler implements RepresentationModelAssembler<Anno
         EntityModel<Announce> todoModel = EntityModel.of(a,
                 linkTo(methodOn(AnnounceController.class).one(a.getId())).withSelfRel(),
                 linkTo(methodOn(AnnounceController.class).all()).withRel("announces"),
-                linkTo(methodOn(AnnounceController.class).remove(a.getId())).withRel("remove"));
+                linkTo(methodOn(AnnounceController.class).remove(a.getId())).withRel("remove"),
+                linkTo(methodOn(AnnounceController.class).searchByType(a.getType())).withRel("type"),
+                linkTo(methodOn(AnnounceController.class).searchBySeller(a.getSeller())).withRel("seller"));
 
         return todoModel;
     }
