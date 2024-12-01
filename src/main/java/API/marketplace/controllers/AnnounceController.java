@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -36,7 +37,7 @@ public class AnnounceController {
     }
 
     // return all the announces on the database
-    @GetMapping("/all")
+    @GetMapping("")
     @ResponseBody
     public CollectionModel<EntityModel<Announce>> all() {
         List<EntityModel<Announce>> announces = repository.findAll().stream().map(
@@ -46,9 +47,9 @@ public class AnnounceController {
     }
 
     // return all the announces with given type on the database
-    @GetMapping("/type/{type}")
+    @GetMapping("/type")
     @ResponseBody
-    public CollectionModel<EntityModel<Announce>> searchByType(@PathVariable String type) {
+    public CollectionModel<EntityModel<Announce>> searchByType(@RequestParam("type") String type) {
         List<EntityModel<Announce>> announces = repository.findByType(type).stream().map(
                 assembler::toModel).collect(Collectors.toList());
 
@@ -56,9 +57,9 @@ public class AnnounceController {
     }
 
     // return all the announces with given type on the database
-    @GetMapping("/seller/{seller}")
+    @GetMapping("/seller")
     @ResponseBody
-    public CollectionModel<EntityModel<Announce>> searchBySeller(@PathVariable String seller) {
+    public CollectionModel<EntityModel<Announce>> searchBySeller(@RequestParam("seller") String seller) {
         List<EntityModel<Announce>> announces = repository.findBySeller(seller).stream().map(
                 assembler::toModel).collect(Collectors.toList());
 
@@ -82,7 +83,6 @@ public class AnnounceController {
 
         return ResponseEntity.created(linkTo(methodOn(AnnounceController.class).one(newAnnounce.getId())).toUri()).body(
                 assembler.toModel(newAnnounce));
-
     } 
 
     // verify if the announce of id x exist if so change the values of the announce, if don't exist add the announce
