@@ -25,7 +25,7 @@ mvn spring-boot:run
 #### search all
 get method
 ```
-http://localhost:8080/announces/all
+http://localhost:8080/announces
 ```
 
 #### search by id
