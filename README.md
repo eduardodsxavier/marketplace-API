@@ -53,3 +53,27 @@ must have a body with the announce infos
 ```
 http://localhost:8080/announces/{id}
 ```
+
+#### search by type
+get method
+```
+http://localhost:8080/announces/type?type={type}
+```
+
+#### show all types
+get method
+```
+http://localhost:8080/announces/types
+```
+
+#### search by seller
+get method
+```
+http://localhost:8080/announces/seller?seller={seller}
+```
+
+#### show all sellers
+get method
+```
+http://localhost:8080/announces/sellers
+```

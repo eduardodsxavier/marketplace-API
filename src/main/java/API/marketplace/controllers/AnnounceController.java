@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,6 +57,12 @@ public class AnnounceController {
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
     }
 
+    @GetMapping("/types")
+    @ResponseBody
+    public CollectionModel<EntityModel<Link>> allTypes() {
+        return CollectionModel.of(repository.allTypes().stream().map(assembler::typeModel).collect(Collectors.toList()));
+    }
+
     // return all the announces with given type on the database
     @GetMapping("/seller")
     @ResponseBody
@@ -64,6 +71,12 @@ public class AnnounceController {
                 assembler::toModel).collect(Collectors.toList());
 
         return CollectionModel.of(announces, linkTo(methodOn(AnnounceController.class).all()).withSelfRel());
+    }
+
+    @GetMapping("/sellers")
+    @ResponseBody
+    public CollectionModel<EntityModel<Link>> allSellers() {
+        return CollectionModel.of(repository.allSellers().stream().map(assembler::sellerModel).collect(Collectors.toList()));
     }
 
     // return the announces on the database with the id passed by the URL

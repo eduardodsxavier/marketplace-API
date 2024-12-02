@@ -13,4 +13,11 @@ public interface AnnounceRepository extends JpaRepository<Announce, Long> {
 
     @Query("SELECT a FROM Announce a WHERE a.seller = %?1")
     List<Announce> findBySeller(String seller);
+
+    @Query("SELECT type FROM Announce")
+    List<String> allTypes();
+
+    @Query("SELECT seller FROM Announce")
+    List<String> allSellers();
+
 }
