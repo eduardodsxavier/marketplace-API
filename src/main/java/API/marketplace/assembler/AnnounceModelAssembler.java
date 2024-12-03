@@ -5,9 +5,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-import org.springframework.hateoas.Link;
 
 import API.marketplace.models.Announce;
+import API.marketplace.models.link;
 import API.marketplace.controllers.AnnounceController;
 
 
@@ -26,12 +26,12 @@ public class AnnounceModelAssembler implements RepresentationModelAssembler<Anno
         return AnnounceModel;
     }
 
-    public EntityModel<Link> typeModel(String type) {
-        return EntityModel.of(linkTo(methodOn(AnnounceController.class).searchByType(type)).withRel(type));
+    public EntityModel<link> typeModel(String type) {
+        return EntityModel.of(new link(type, linkTo(methodOn(AnnounceController.class).searchByType(type)).withRel(type)));
     }
 
-    public EntityModel<Link> sellerModel(String seller) {
-        return EntityModel.of(linkTo(methodOn(AnnounceController.class).searchBySeller(seller)).withRel(seller));
+    public EntityModel<link> sellerModel(String seller) {
+        return EntityModel.of(new link(seller, linkTo(methodOn(AnnounceController.class).searchByType(seller)).withRel(seller)));
     }
 }
 

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import API.marketplace.repositorys.AnnounceRepository;
 import API.marketplace.models.Announce;
+import API.marketplace.models.link;
 import API.marketplace.assembler.AnnounceModelAssembler;
 import API.marketplace.exceptions.AnnounceNotFoundException;
 
@@ -59,7 +59,7 @@ public class AnnounceController {
 
     @GetMapping("/types")
     @ResponseBody
-    public CollectionModel<EntityModel<Link>> allTypes() {
+    public CollectionModel<EntityModel<link>> allTypes() {
         return CollectionModel.of(repository.allTypes().stream().map(assembler::typeModel).collect(Collectors.toList()));
     }
 
@@ -75,7 +75,7 @@ public class AnnounceController {
 
     @GetMapping("/sellers")
     @ResponseBody
-    public CollectionModel<EntityModel<Link>> allSellers() {
+    public CollectionModel<EntityModel<link>> allSellers() {
         return CollectionModel.of(repository.allSellers().stream().map(assembler::sellerModel).collect(Collectors.toList()));
     }
 
